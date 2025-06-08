@@ -1,0 +1,38 @@
+
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+.teste {
+  width: 55mm;
+  height: 85mm;
+  background-image: url('/images/background.jpeg');
+  background-size: cover;
+  background-position: center;
+}
+
+
+@media (max-width: 768px) {
+  #menu-items {
+      display: none; 
+  }
+  #menu-items.active {
+      height: 100vh;
+      display: flex; 
+      flex-direction: column; 
+      position: absolute; 
+      top: 100%; 
+      left: 0; 
+      background-color: #1E3A8A; 
+      width: 250px;
+      z-index: 1000; 
+  }
+}
