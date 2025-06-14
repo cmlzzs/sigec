@@ -10,12 +10,16 @@ use Illuminate\Support\Str;
  use Illuminate\Support\Facades\Auth;
 
 
-class BadgeController extends Controller
-{
-    public function index()
-    {
-        $badges = Badge::all();
-        return view('badges.index', compact('badges'));
+class BadgeController extends Controller {
+    
+    public function index(Request $request){
+    $search = $request->input('search');
+
+    $badges = Badge::query()
+                   ->where('nome', 'LIKE', "%{$search}%")
+                   ->orWhere('matricula', 'LIKE', "%{$search}%")
+                   ->paginate(10);
+    return view('badges.index', compact('badges', 'search'));
     }
 
     public function create(){

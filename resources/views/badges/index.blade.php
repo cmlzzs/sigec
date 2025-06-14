@@ -62,7 +62,9 @@
     </div>
   </div>
   
-    <div class="container mx-auto flex-1 lg:pl-[290px]">
+  
+  <div class="container mx-auto flex-1 lg:pl-[290px]">
+  <div class="max-w-6xl mx-auto flex-1 justify-center items-center p-4">
         <!-- Flash Messages -->
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-auto w-3/4 mt-4" role="alert">
@@ -76,7 +78,16 @@
         </div>
     @endif
 
+     
+        <!-- Formulário de Busca -->
+        <form method="GET" action="{{ route('badges.index') }}" class="w-full sm:w-auto flex justify-center items-center">
+            <input class="p-2 border focus:outline-none px-4 py-2 focus:ring focus:ring-blue-400 focus:border-blue-500 border-gray-300 rounded-md w-full sm:max-w-xs" 
+                type="text" name="search" placeholder="Nome ou matrícula" value="{{ request('search') }}">
+            <button class="bg-blue-700 text-white p-2 rounded-md ml-2">Buscar</button>
+        </form>
+        
     <div id="container" class="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-4 p-3">
+      
       <!-- Container do Crachá -->
       @foreach ($badges as $badge)
       <div class="flex flex-col items-center justify-center mt-4 badge">
@@ -112,15 +123,15 @@
         <button class="text-blue-900 px-3 py-3 rounded border border-gray-300 text-lg" onclick="next()">
             <i class="fa-solid fa-forward"></i>
         </button>
-    </div>
+</div>
 
 <!-- fim do container -->
-        </div>
+</div>
 
-        <script>
+<script>
 let index = 0;
 const items = document.querySelectorAll(".badge");
-const itemsPerPage = 5;
+const itemsPerPage = 4;
 const totalPages = Math.ceil(items.length / itemsPerPage);
 const pageCount = document.getElementById("pageCount");
 

@@ -20,6 +20,7 @@
   <h1 class="text-xl flex justify-center font-bold items-center text-white mx-auto">Sigec</h1>
 </div>
 
+
   <!-- Sidebar -->
    <div id="sidebar" class="sidebar fixed top-0 bottom-0 lg:left-0 left-[-300px] duration-310 p-2 w-[300px] lg:w-[350px] xl:w-[341px] overflow-y-auto text-center bg-blue-950 shadow h-screen">
     <div class="text-gray-100 text-xl">
@@ -29,37 +30,46 @@
     <h1 class="font-bold text-[15px] text-center">Sistema de gerenciamento de crachás</h1>
       </div>
       <hr class="my-2">
-    
+     
+       <a href="{{ route('admin.users.dashboard')}}">
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
         <i class="fa-solid fa-house"></i>
-        <a href="{{ route('admin.users.dashboard')}}" class="text-[15px] ml-4 text-gray-200 rounded-md">Inicio</a>
+      <span class="text-[15px] ml-4 text-gray-200 rounded-md">Início</span>
         </div>
+       </a>
 
+        <a href="{{ route('badges.create') }}">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
         <i class="fa-solid fa-id-badge"></i>
-          <a href="{{ route('badges.create') }}" class="text-[15px] ml-4 text-gray-200 rounded-md">Solicitar crachá</a>
+        <span class="text-[15px] ml-4 text-gray-200 rounded-md">Solicitar crachá</span>
         </div>
+        </a>
         
+        <a href="{{ route('admin.users.historico') }}">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-     <i class="fa-solid fa-folder-open"></i>
-          <a href="{{ route('admin.users.historico') }}" class="text-[15px] ml-4 text-gray-200">Histórico de solicitação</a>
+         <i class="fa-solid fa-folder-open"></i>
+          <span class="text-[15px] ml-4 text-gray-200">Histórico de solicitação</span>
         </div>
+        </a>
 
-        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <i class="fas fa-cogs"></i>
-          <a href="{{ route('admin.users.configs') }}" class="text-[15px] ml-4 text-gray-200">Configurações</a>
-        </div>
-
+         <a href="{{ route('admin.users.edit', $user->id) }}">
+          <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+          <i class="fa-solid fa-circle-user"></i>
+          <span class="text-[15px] ml-4 text-gray-200">Perfil</span>
+          </div>
+        </a>
+      
         <!-- logout -->
-        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <form action="{{ route('logout') }}" method="POST" style="display: inline; ">
-            @csrf
-            <a href="#" class="flex items-center rounded-md" onclick="this.closest('form').submit(); return false;">
-            <i class="fa-solid fa-right-from-bracket mr-2"></i>
-                <span class="text-[15px]">Sair</span> 
-            </a>
-        </form>
-        </div>
+      <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <a href="#" onclick="this.closest('form').submit(); return false;">
+            <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+                <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                <span class="text-[15px] text-gray-200">Sair</span>
+            </div>
+        </a>
+    </form>
+
       </div>
     </div>
   </div>
@@ -94,7 +104,7 @@
             <td class="px-6 py-3 text-center text-gray-600">{{ $badge->protocolo }}</td>
             <td class="px-6 py-3 text-center text-gray-600">{{ $badge->created_at->format('d/m/Y') }}</td>
             <td class="px-6 py-3 text-center font-semibold 
-                {{ $badge->status == 'pendente' ? 'text-yellow-600' : ($badge->status == 'aprovado' ? 'text-green-600' : 'text-red-600') }}">
+               {{ $badge->status == 'Disponível' ? 'text-green-600' : 'text-red-700' }}">
                 {{ $badge->status }}
             </td>
         </tr>

@@ -33,16 +33,11 @@ Route::get('/', function () {
 });
 
 
-Route::get('/config', function () {
-    $user = Auth::user(); 
-    return view('admin.users.configs', compact('user'));
-})->name('admin.users.configs');
-
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/perfil/update', [UserController::class, 'updateSelf'])->name('user.profile.update');
+    Route::get('/perfil/password', [UserController::class, 'editPassword'])->name('user.password.edit');
+    Route::post('/perfil/password/update', [UserController::class, 'updatePassword'])->name('user.password.update');
 });
-
 
 
 // Rotas de autenticação
@@ -71,7 +66,8 @@ Route::post('/badge/{id}/registrar', function ($id) {
 
 
 Route::get('/admin', function () {
-    return view('admin.dashboard');
+    $user = Auth::user(); 
+    return view('admin.dashboard', compact('user'));
 })->name('admin.dashboard');
 
 Route::get('/users', function () {
@@ -106,6 +102,7 @@ Route::delete('/badges/{badge}/cancelar', [BadgeController::class, 'cancelar'])-
 Route::get('/funcionario', function () {
     $lotes = Lote::all();
     $badges = Badge::all();
+    $user = Auth::user();
 
      // conta usuarios do banco
     $totalUsers = User::count();
@@ -115,32 +112,30 @@ Route::get('/funcionario', function () {
     $producao = Lote::where('status', 'Em produção')->count();
     $grafica = Lote::where('status', 'Gráfica')->count();
 
-    return view('funcionario.index', compact('lotes', 'badges', 'totalUsers', 'finalizados', 'producao', 'grafica')); 
+    return view('funcionario.index', compact('lotes', 'badges', 'user', 'totalUsers', 'finalizados', 'producao', 'grafica')); 
 })->name('funcionario.index');
 
 
 // passar as varias nessa rota 
 Route::get('/admin', function () {
     $users = User::all();
-    $lotes = Lote::all();
-    $badges = Badge::all();
-
+    $user = Auth::user(); 
       // conta usuarios do banco
     $totalUsers = User::count();
-    return view('admin.dashboard', compact('users', 'lotes', 'badges', 'totalUsers')); 
+    return view('admin.dashboard', compact('users', 'user', 'totalUsers')); 
 })->name('admin.dashboard');
 
 Route::get('/users', function () {
-    $users = User::all(); 
+    $user = Auth::user(); 
     //$badges = Badge::all(); 
     $badges = Badge::where('user_id', auth()->id())->get();
-    return view('admin.users.dashboard', compact('users', 'badges')); 
+    return view('admin.users.dashboard', compact('user', 'badges')); 
 })->name('admin.users.dashboard');
 
 Route::get('/historico', function () {
-    $users = User::all(); 
+    $user = Auth::user(); 
     $badges = Badge::where('user_id', auth()->id())->get();
-    return view('admin.users.historico', compact('users', 'badges')); 
+    return view('admin.users.historico', compact('user', 'badges')); 
 })->name('admin.users.historico');
 
 
@@ -159,7 +154,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store'); // criar 
     Route::get('/users/criar', [UserController::class, 'create'])->name('admin.users.create'); // criar 
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit'); //  edição
-    Route::get('/users/{user}', [LoteController::class, 'show'])->name('admin.users.show'); // ver
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show'); // ver
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update'); // atualizar 
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy'); // deletar
    
@@ -187,6 +182,7 @@ Route::prefix('funcionarios')->group(function () {
      Route::get('/badges/{badge}', [BadgeController::class, 'show'])->name('admin.badges.show'); 
      Route::put('/badges/{badge}', [BadgeController::class, 'update'])->name('admin.badges.update'); 
      Route::delete('/badges/{badge}', [BadgeController::class, 'destroy'])->name('admin.badges.destroy'); 
+     Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show'); // ver
 });
 
 Route::prefix('admin')->group(function () {

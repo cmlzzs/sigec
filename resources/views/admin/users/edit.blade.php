@@ -30,32 +30,39 @@
       </div>
       <hr class="my-2 text-gray-600">
   
-
+        @if($user->role == 'Admin')
+         <a href="{{ route('admin.dashboard')}}">
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <i class="fa-solid fa-house"></i>
-        <a href="{{ route('admin.dashboard')}}" class="text-[15px] ml-4 text-gray-200 rounded-md">Inicio</a>
+            <i class="fa-solid fa-house"></i>
+            <span class="text-[15px] ml-4 text-gray-200 rounded-md">Início</span>
         </div>
+         </a>
+        @elseif($user->role == 'Solicitante')
+          <a href="{{ route('admin.users.dashboard')}}">
+            <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+                <i class="fa-solid fa-user"></i>
+                <span class="text-[15px] ml-4 text-gray-200 rounded-md">Início</span>
+            </div>
+          </a>
+        @elseif($user->role == "Funcionário")
+        <a href="{{ route('funcionario.index')}}">
+            <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+                <i class="fa-solid fa-user"></i>
+                <span class="text-[15px] ml-4 text-gray-200 rounded-md">Início</span>
+            </div>
+        </a>
+        @endif
 
-         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <i class="fa-solid fa-user-plus mr-1"></i>
-       <a href="{{ route('admin.users.create') }}" class="text-[15px] ml-4 text-gray-200 rounded-md">Criar usuários</a>
-        </div>
-
-
+           <!-- Logout -->
+    <form action="{{ route('logout') }}" method="POST">
+    @csrf
+    <a href="#" onclick="this.closest('form').submit(); return false;">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-       <i class="fa-solid fa-circle-user"></i>
-          <a href="{{ route('admin.users.configs')}}" class="text-[15px] ml-4 text-gray-200">Perfil</a>
-        </div>
-
-        <!-- Logout -->
-        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <form action="{{ route('logout') }}" method="POST" style="display: inline; ">
-            @csrf
-            <a href="#" class="flex items-center rounded-md" onclick="this.closest('form').submit(); return false;">
             <i class="fa-solid fa-right-from-bracket mr-2"></i>
-                <span class="text-[15px]">Sair</span> 
-            </a>
-        </form>
+            <span class="text-[15px] text-gray-200">Sair</span>
+        </div>
+    </a>
+    </form>
         </div>
       </div>
     </div>
@@ -86,50 +93,48 @@
             <form class="bg-white p-5" action="{{ route('admin.users.update', $user->id) }}" method="POST">
                 @csrf
                 @method('PUT')
+              
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700">Nome:</label>
+                        <input type="text" id="name" name="name" value="{{ $user->name }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                    </div>
 
-                <div class="mb-4">
-                    <label for="nome" class="block text-gray-700">Nome:</label>
-                   <input 
-                    type="text" 
-                    id="nome" 
-                    name="nome" 
-                    value="{{ $user->nome }}"  
-                    class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    required
-                >
+                    
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700">Email:</label>
+                        <input type="text" id="email" name="email" value="{{ $user->email }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                    </div>
 
-                <div class="mb-4">
-                    <label for="matricula" class="block text-gray-700">Matrícula:</label>
-                    <input type="text" id="matricula" name="matricula" value="{{ $user->matricula }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                </div>
+                   
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700">Nova Senha:</label>
+                        <input type="password" id="password" name="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
 
-                <div class="mb-4">
-                    <label for="setor" class="block text-gray-700">Setor:</label>
-                    <input type="text" id="setor" name="setor" value="{{ $user->setor }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-                </div>
+                  
+                    @if(auth()->user()->role == 'Admin')
+                        <div class="mb-4">
+                            <label for="matricula" class="block text-gray-700">Matrícula:</label>
+                            <input type="text" id="matricula" name="matricula" value="{{ $user->matricula }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        </div>
 
-                <div class="mb-4">
-                    <label for="role" class="block text-gray-700">Papel:</label>
-                    <select id="role" name="role" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="Funcionário" {{ $user->role == 'Funcionário' ? 'selected' : '' }}>Funcionário</option>
-                        <option value="Solicitante" {{ $user->role == 'Solicitante' ? 'selected' : '' }}>Solicitante</option>
-                    </select>
+                        <div class="mb-4">
+                            <label for="setor" class="block text-gray-700">Setor:</label>
+                            <input type="text" id="setor" name="setor" value="{{ $user->setor }}" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+                        </div>
 
+                        <div class="mb-4">
+                            <label for="role" class="block text-gray-700">Papel:</label>
+                            <select id="role" name="role" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="Funcionário" {{ $user->role == 'Funcionário' ? 'selected' : '' }}>Funcionário</option>
+                                <option value="Solicitante" {{ $user->role == 'Solicitante' ? 'selected' : '' }}>Solicitante</option>
+                            </select>
+                        </div>
+                    @endif
 
-                <div class="mb-4">
-                    <label for="password" class="block text-gray-700">Nova Senha:</label>
-                    <input type="password" id="password" name="password" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-    
-                </div>
-
+            
                 <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Salvar</button>
-            </form>
-        </div>
-    </div>
-       
-
-  
 
  <script src="https://kit.fontawesome.com/574318e399.js" crossorigin="anonymous"></script>
  <script src="{{ asset('js/index.js') }}"></script>

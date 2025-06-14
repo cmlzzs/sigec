@@ -16,7 +16,7 @@ function updatePreview() {
   // obtendo os valores dos campos de entrada ou definindo valores padrão
   let nome = document.getElementById('nome').value || 'NOME';
   let matricula = document.getElementById('matricula').value || 'Matrícula';
-  let funcao = document.getElementById('funcao').value || 'Cargo';
+  let funcao = document.getElementById('funcao').value || 'Função';
   let setor = document.getElementById('setor').value || 'Setor';
 
   // atualizando os textos nos elementos do crachá

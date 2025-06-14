@@ -11,6 +11,7 @@
 </head>
 <body class="bg-blue-50">
  <!-- Botão para abrir/fechar o menu lateral -->
+
  <div class="bg-blue-900 flex items-center lg:hidden justify-between">
   <span class="text-white text-3xl top-4 left-4 cursor-pointer lg:hidden" onclick="Openbar()">
     <i class="fa-solid fa-bars p-3 ml-5 rounded-md"></i>
@@ -28,37 +29,51 @@
     <img class="w-20 h-20" src="{{ asset('images/logo.jpg')}}" alt="logo do sistema">
     <h1 class="font-bold text-[15px] text-center">Sistema de gerenciamento de crachá</h1>
       </div>
-      <hr class="my-2 text-gray-600">
 
+      <hr class="my-2 text-gray-600">
+  
+       <a href="{{ route('funcionario.index')}}">
         <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
         <i class="fa-solid fa-house"></i>
-        <a href="{{ route('funcionario.index')}}" class="text-[15px] ml-4 text-gray-200 rounded-md">Inicio</a>
+          <span class="text-[15px] ml-4 text-gray-200">Inicio</span>
         </div>
-
+       </a>
+        
+         <a href="{{ route('badges.create') }}" >
+        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+        <i class="fa-solid fa-user-plus mr-1"></i>
+          <span class="text-[15px] ml-4 text-gray-200">Criar crachá</span>
+        </div>
+         </a>
+      
+         <a href="{{ route('badges.index')}}">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
         <i class="fa-solid fa-id-badge"></i>
-          <a href="{{ route('badges.index')}}" class="text-[15px] ml-4 text-gray-200 rounded-md">Todos crachás</a>
+          <span class="text-[15px] ml-4 text-gray-200">Todos os crachás</span>
         </div>
+          </a>
 
-        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <i class="fa-solid fa-circle-user"></i>
-          <a href="#" class="text-[15px] ml-4 text-gray-200">Perfil</a>
-        </div>
-
+         <a href="{{ route('admin.users.configs')}}">
+          <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+          <i class="fa-solid fa-circle-user"></i>
+          <span class="text-[15px] ml-4 text-gray-200">Perfil</span>
+          </div>
+        </a>
         <!-- Logout -->
+    <form action="{{ route('logout') }}" method="POST">
+    @csrf
+    <a href="#" onclick="this.closest('form').submit(); return false;">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-        <form action="{{ route('logout') }}" method="POST" style="display: inline; ">
-            @csrf
-            <a href="#" class="flex items-center rounded-md" onclick="this.closest('form').submit(); return false;">
             <i class="fa-solid fa-right-from-bracket mr-2"></i>
-                <span class="text-[15px]">Sair</span> 
-            </a>
-        </form>
+            <span class="text-[15px] text-gray-200">Sair</span>
         </div>
-      </div> 
+    </a>
+    </form>
+    </div> 
     </div>
   </div>
-  
+
+
     <div class="container mx-auto flex-1 lg:pl-[290px] bg-blue-50">
         <!-- Flash Messages -->
     @if(session('success'))
@@ -92,6 +107,7 @@
             <p class="font-bold cracha-text text-[13px]">{{ $badge->funcao }}</p>
             <p class="font-bold cracha-text text-[13px]">{{ $badge->setor }}</p>
             <p class="font-bold cracha-text text-[13px]">{{ $badge->matricula }}</p>
+
           </div>
         </div>
   
@@ -105,11 +121,12 @@
           <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')"> <i class="fa-solid fa-trash text-white mr-1"></i>Excluir</button>
         </form>
         </div>
-        
+   
       </div>
       @endforeach
+      
   </div>
-
+    
   <div class="mt-2 flex justify-center gap-6">
         <button class="text-blue-900 px-3 py-3 rounded border border-gray-300 text-lg" onclick="prev()">
             <i class="fa-solid fa-backward"></i>

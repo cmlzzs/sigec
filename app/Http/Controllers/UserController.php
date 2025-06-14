@@ -15,17 +15,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class UserController extends Controller 
-{
+class UserController extends Controller {
     public function index(Request $request){
         $search = $request->input('search');
 
-        // busca usuarios
-        $users = User::when($search, function ($query) use ($search) {
-            return $query->where('nome', 'like', "%{$search}%")
-                         ->orWhere('matricula', 'like', "%{$search}%");
-        })->get();
-
+    // consulta com filtro
+    $users = User::query()
+                 ->where('nome', 'LIKE', "%{$search}%")
+                 ->orWhere('matricula', 'LIKE', "%{$search}%")
+                 ->paginate(10);
         return view('admin.users.index', compact('users', 'search'));
     }
 
@@ -60,7 +58,6 @@ class UserController extends Controller
     }
 
     public function edit(User $user){
-
     $users = User::all(); 
     return view('admin.users.edit', compact('user', 'users')); 
     }
@@ -71,9 +68,9 @@ class UserController extends Controller
     'nome' => 'nullable|string|max:255',
     'email' => 'nullable|email|unique:users,email,' . $user->id,
     'password' => 'nullable|min:6',
-    'matricula' => 'required|unique:users,matricula,' . $user->id,
+    'matricula' => 'nullable|unique:users,matricula,' . $user->id,
     'setor' => 'nullable|string|max:255', 
-    'role' => 'nullable|string' // 
+    'role' => 'nullable|string' 
 ], [
     'matricula.required' => 'A matrícula é obrigatória.',
     'matricula.unique' => 'Ops! A matrícula já foi utilizada.'
@@ -116,14 +113,17 @@ class UserController extends Controller
         return redirect()->route('admin.users.historico', compact('search', 'dates'));
 
     }
+    public function editPassword(){
+    return view('admin.users.password');
+    }
+
 
     public function showForgotPasswordForm(){
         return view('auth.forgot-password');
-}
+    }
 
 
-    public function sendResetLink(Request $request)
-    {
+    public function sendResetLink(Request $request){
         $request->validate(['email' => 'required|email|exists:users,email']);
         $email = $request->email;
 
@@ -144,9 +144,7 @@ class UserController extends Controller
         return view('mail.resetForm');
     }
 
-
-public function resetPassword(Request $request)
-{
+    public function resetPassword(Request $request){
     $request->validate([
         'token' => 'required',
         'password' => 'required|min:6|confirmed',

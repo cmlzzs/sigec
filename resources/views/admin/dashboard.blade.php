@@ -45,12 +45,12 @@
           </div>
         </a>
 
-       <a href="{{ route('admin.users.configs')}}">
-        <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+        <a href="{{ route('admin.users.edit', $user->id) }}">
+          <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
           <i class="fa-solid fa-circle-user"></i>
-           <span class="text-[15px] ml-4 text-gray-200">Perfil</span>
-        </div>
-       </a>
+          <span class="text-[15px] ml-4 text-gray-200">Perfil</span>
+          </div>
+        </a>
 
       <!-- Logout -->
     <form action="{{ route('logout') }}" method="POST">
@@ -99,7 +99,7 @@
         
     </div>
 
-     <div class="overflow-x-auto">
+       <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300">
                 <thead class="bg-blue-800 text-white font-bold">
                     <tr>
@@ -119,21 +119,20 @@
                         <td class="px-6 py-3 text-sm">{{ $user->role }}</td>
                         <td class="px-6 py-3 text-sm">{{ $user->matricula }}</td>
                         <td class="px-6 py-3 text-sm">{{ $user->setor }}</td>
-                        <td class="flex gap-2 items-center justify-center">
-                        <a href="{{ route('admin.users.edit', $user->id) }}"><i class="bi bi-pencil-square bg-blue-100 px-2 py-1 rounded text-blue-800 ml-3"></i></a> 
-                          <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')"> <i class="fa-solid fa-trash bg-red-100 px-2 py-1 rounded text-red-500 ml-3 mr-2"></i></button>
-                          </form>
-                          </td> 
+                        <td class="mt-3 flex">
+                       <a href="{{ route('admin.users.edit', $user->id) }}"><i class="bi bi-pencil-square bg-blue-100 px-3 py-1 rounded text-blue-800 ml-3"></i></a> 
+                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')"> <i class="fa-solid fa-trash px-3 py-1 bg-red-100 rounded text-red-500 ml-3 mr-3"></i></a> 
+                        </form>
+                        </td> 
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-   
-
 </div>
             </div>
         </div>

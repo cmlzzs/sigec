@@ -43,12 +43,22 @@
     </div>
     </a>
 
+    @if(auth()->user()->role === 'Funcionário')
     <a href="{{ route('badges.create') }}">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
             <i class="fa-solid fa-id-badge"></i>
-            <span class="text-[15px] ml-4 text-gray-200 rounded-md">Solicitar crachá</span>
+            <span class="text-[15px] ml-4 text-gray-200 rounded-md">Criar Crachá</span>
         </div>
     </a>
+    @elseif(auth()->user()->role === 'Solicitante')
+        <a href="{{ route('badges.create') }}">
+            <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+                <i class="fa-solid fa-id-badge"></i>
+                <span class="text-[15px] ml-4 text-gray-200 rounded-md">Solicitar Crachá</span>
+            </div>
+        </a>
+    @endif
+
 
     @if(auth()->user()->role === 'Solicitante')
         <a href="{{ route('admin.users.historico') }}">
@@ -62,8 +72,8 @@
 
     <a href="{{ route('admin.users.configs') }}">
         <div class="p-2.5 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-            <i class="fas fa-cogs"></i>
-            <span class="text-[15px] ml-4 text-gray-200">Configurações</span>
+              <i class="fa-solid fa-circle-user"></i>
+            <span class="text-[15px] ml-4 text-gray-200">Perfil</span>
         </div>
     </a>
 
@@ -106,23 +116,23 @@
         <form method="POST" action="{{ route('admin.badges.store') }}" enctype="multipart/form-data">
             @csrf
             <label for="foto" class="block text-blue-700 font-semibold">Nome:</label>
-            <input type="text" id="nome" name="nome" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 " value="{{ Auth::user()->nome }}" oninput="updatePreview()">
-            <small class="text-red-600 font-semibold">Primeiro e último nome</small>
+            <input type="text" id="nome" name="nome" maxlength="20" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500" value="Carima Lemos de Abrue" oninput="updatePreview()">
+            <small class="text-red-600 font-semibold">Primeiro e último nome. Max: 20 caracteres</small>
             
             <label for="foto" class="block text-blue-700 font-semibold">Matrícula:</label>
-            <input oninput="validateMatricula()" type="text" id="matricula" name="matricula" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 " value="{{ auth()->user()->matricula }}" oninput="updatePreview()">
+            <input oninput="validateMatricula()" type="text" id="matricula" name="matricula" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500" oninput="updatePreview()">
             <small id="matriculaError" class="text-red-600 font-semibold"> </small>
 
             <label for="foto" class="block text-blue-700 font-semibold">Função</label>
-            <input type="text" id="funcao" name="funcao" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 placeholder-black"  value="{{ Auth::user()->funcao }}" placeholder="Desenvolvedor de Sistemas" oninput="updatePreview()">
+            <input type="text" id="funcao" name="funcao" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500" oninput="updatePreview()">
             <small  class="text-red-600 font-semibold">Ex: Analista Judiciário</small>
 
             <label for="setor" class="block text-blue-700 font-semibold">Setor:</label>
-            <input type="text" id="setor" name="setor" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 " value="{{ Auth::user()->setor }}"  oninput="updatePreview()">
-           
-
+            <input type="text" id="setor" name="setor" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 " oninput="updatePreview()">
+            <small  class="text-red-600 font-semibold">Ex: Secretaria de Comunicação</small>
+            
             <label for="foto" class="block text-blue-700 font-semibold">Foto:</label>
-            <input type="file" id="foto" name="foto" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500 " onchange="updatePreview()">
+            <input type="file" id="foto" name="foto" class="w-full border border-blue-500 rounded p-2 outline-none focus:ring focus:ring-blue-400 focus:border-blue-500" onchange="updatePreview()">
             <small class="text-red-600 font-semibold">Tamanho:600x600</small>
 
             <label for="mensagem" class="block text-blue-700 font-semibold">Mensagem:</label>
@@ -140,15 +150,15 @@
                 <img id="previewFoto" class="rounded-full w-20 h-20 border-2 border-gray-300">
 
                 <!-- Nome -->
-                <p id="previewNome" class="font-bold uppercase mt-2 cracha-text text-[14px]">{{ Auth::user()->nome }}</p>
+                <p id="previewNome" class="font-bold uppercase mt-2 cracha-text text-[14px]">NOME</p>
 
                 <!-- Função/Cargo -->
                 <p id="previewFuncao" class="font-bold cracha-text text-[13px]">Função</p>
 
                 <!-- Setor -->
-                <p id="previewSetor" class="font-bold cracha-text text-[13px]">{{ Auth::user()->setor }}</p>
+                <p id="previewSetor" class="font-bold cracha-text text-[13px]">Setor</p>
                     <!-- Matrícula -->
-                    <p id="previewMatricula" class="font-bold cracha-text text-[13px]">{{ Auth::user()->matricula }}</p>
+                    <p id="previewMatricula" class="font-bold cracha-text text-[13px]">Matrícula</p>
                  </div>
                  
             </div>
